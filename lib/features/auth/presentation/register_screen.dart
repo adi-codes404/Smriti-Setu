@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smriti_setu/app/theme/app_colors.dart';
@@ -12,6 +11,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -19,6 +19,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _hidePassword = true;
   bool _hideConfirm = true;
+
+  String? _selectedRole;
+
+  final List<String> _roles = [
+    'Family Member',
+    'Elderly Person',
+  ];
 
   @override
   void dispose() {
@@ -32,19 +39,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _register() {
     if (!_formKey.currentState!.validate()) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Demo only: connect authentication to create an account.',
+    if (_selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select your role.'),
         ),
-      ),
-    );
+      );
+      return;
+    }
+
+    context.go('/elderly-home');
   }
 
   InputDecoration _decoration(
-      String label,
-      IconData icon,
-      ) {
+    String label,
+    IconData icon,
+  ) {
     return InputDecoration(
       labelText: label,
       prefixIcon: Icon(icon),
@@ -80,6 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 color: AppColors.primaryTerracotta,
               ),
               const SizedBox(height: 16),
+
               const Text(
                 'Join Smriti Setu',
                 textAlign: TextAlign.center,
@@ -90,9 +101,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               const SizedBox(height: 8),
+
               const Text(
                 'Create an account to begin your journey '
-                    'of sharing memories.',
+                'of sharing memories.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,
@@ -102,6 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 28),
 
+              // Full name
               TextFormField(
                 controller: _nameController,
                 textCapitalization: TextCapitalization.words,
@@ -111,7 +124,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Icons.person_outline,
                 ),
                 validator: (value) {
-                  if (value == null || value.trim().length < 2) {
+                  if (value == null ||
+                      value.trim().length < 2) {
                     return 'Enter your full name';
                   }
                   return null;
@@ -119,6 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Email
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -129,6 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 validator: (value) {
                   final email = value?.trim() ?? '';
+
                   if (!RegExp(
                     r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
                   ).hasMatch(email)) {
@@ -139,10 +155,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Role selection
+              DropdownButtonFormField<String>(
+                initialValue: _selectedRole,
+                decoration: _decoration(
+                  'Select your role',
+                  Icons.group_outlined,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                items: _roles.map((role) {
+                  return DropdownMenuItem<String>(
+                    value: role,
+                    child: Text(role),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedRole = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your role';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Password
               TextFormField(
                 controller: _passwordController,
                 obscureText: _hidePassword,
-                autofillHints: const [AutofillHints.newPassword],
+                autofillHints: const [
+                  AutofillHints.newPassword,
+                ],
                 decoration: _decoration(
                   'Password',
                   Icons.lock_outline,
@@ -169,6 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Confirm password
               TextFormField(
                 controller: _confirmController,
                 obscureText: _hideConfirm,
@@ -198,12 +246,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 24),
 
+              // Create account button
               SizedBox(
                 height: 56,
                 child: FilledButton(
                   onPressed: _register,
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primaryTerracotta,
+                    backgroundColor:
+                        AppColors.primaryTerracotta,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -220,6 +270,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               const SizedBox(height: 16),
 
+              // Login navigation
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

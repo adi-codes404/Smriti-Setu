@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smriti_setu/app/theme/app_colors.dart';
@@ -27,13 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     if (!_formKey.currentState!.validate()) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Demo only: connect authentication to log in.',
-        ),
-      ),
-    );
+    context.go('/elderly-home');
   }
 
   @override
@@ -67,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 8),
                   const Text(
                     'Reconnect with the people and memories '
-                        'that matter.',
+                    'that matter.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -97,11 +90,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     validator: (value) {
                       final email = value?.trim() ?? '';
+
                       if (!RegExp(
                         r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
                       ).hasMatch(email)) {
                         return 'Enter a valid email address';
                       }
+
                       return null;
                     },
                   ),
@@ -141,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Enter your password';
                       }
+
                       return null;
                     },
                   ),
@@ -151,8 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: FilledButton(
                       onPressed: _login,
                       style: FilledButton.styleFrom(
-                        backgroundColor:
-                        AppColors.primaryTerracotta,
+                        backgroundColor: AppColors.primaryTerracotta,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
