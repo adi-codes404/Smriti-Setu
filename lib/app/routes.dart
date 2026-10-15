@@ -1,7 +1,11 @@
+
 import 'package:go_router/go_router.dart';
+
 import 'package:smriti_setu/features/archive/domain/memory_message.dart';
 import 'package:smriti_setu/features/archive/presentation/memory_archive_screen.dart';
 import 'package:smriti_setu/features/archive/presentation/memory_detail_screen.dart';
+import 'package:smriti_setu/features/auth/presentation/login_screen.dart';
+import 'package:smriti_setu/features/auth/presentation/register_screen.dart';
 import 'package:smriti_setu/features/onboarding/presentation/role_selection_screen.dart';
 import 'package:smriti_setu/features/onboarding/presentation/splash_screen.dart';
 import 'package:smriti_setu/features/sender/presentation/elderly_home_screen.dart';
@@ -11,7 +15,7 @@ import 'package:smriti_setu/features/sender/presentation/send_confirmation_scree
 import 'package:smriti_setu/features/support/presentation/help_someone_screen.dart';
 import 'package:smriti_setu/features/support/presentation/permissions_screen.dart';
 
-/// Centralized route definitions for Smriti Setu.
+// Centralized route definitions for Smriti Setu.
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
@@ -72,10 +76,23 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) {
             final memory = state.extra as MemoryMessage?;
             final memoryId = state.uri.queryParameters['id'];
-            return MemoryDetailScreen(memory: memory, memoryId: memoryId);
+            return MemoryDetailScreen(
+              memory: memory,
+              memoryId: memoryId,
+            );
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: '/login',
+      name: 'login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/register',
+      name: 'register',
+      builder: (context, state) => const RegisterScreen(),
     ),
   ],
 );

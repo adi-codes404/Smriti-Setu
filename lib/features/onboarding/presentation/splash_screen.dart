@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Navigate to /role after ~1.5 seconds
     _navigationTimer = Timer(const Duration(milliseconds: 1600), () {
       if (mounted) {
-        context.go('/role');
+        context.go('/login');
       }
     });
   }
